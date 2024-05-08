@@ -1,0 +1,8 @@
+apply plugin: 'tivo-docker'
+
+tivoDocker {
+    imageName = "creditapp_smoke-test"
+    ownerEmail = 'inception-scrum@mailman.tivo.com'
+    description = 'Smoke test for echo image'
+}
+

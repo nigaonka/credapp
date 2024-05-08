@@ -1,0 +1,5 @@
+ARG imageTag=latest
+FROM docker.tivo.com/taurus:$imageTag
+LABEL maintainer="Inception Team  <inception-scrum@xperi.com>"
+
+COPY echo.yaml /taurus/

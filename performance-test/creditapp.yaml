@@ -1,0 +1,30 @@
+modules:
+  console:
+    disable: true
+  jmeter:
+    properties:
+      hold_for: 30
+      concurrency: 10
+      throughput: 20
+
+execution:
+- scenario: echo
+  iterations: 5
+
+scenarios:
+  echo:
+    default-address: set-at-runtime
+    headers:
+      Content-Type: application/json
+    requests:
+    - url: /ping
+      label: echoPing
+      method: POST
+      body: { "type": "ping", "response": { "type": "success" } }
+
+reporting:
+- module: passfail
+  criteria:
+    - p95 of echoPing > 100ms
+    - p99 of echoPing > 1000ms
+    - succ of echoPing < 99.5%

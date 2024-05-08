@@ -1,0 +1,92 @@
+
+buildscript {
+	repositories {
+		maven {
+			url 'https://repo-vip.tivo.com:8443/artifactory/plugins-release'
+		}
+	}
+	dependencies {
+		classpath 'com.tivo:tivo-docker-plugin:0.28.54'
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.0.RELEASE"
+	}
+}
+
+plugins {
+
+	id 'org.cyclonedx.bom' version '1.6.1'
+}
+
+apply plugin: 'application'
+apply plugin: 'tivo-docker'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'jacoco'
+apply plugin: 'project-report'
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+mainClassName = 'com.ng.credit.creditapp.CreditappApplication'
+
+repositories {
+	maven {
+		url 'https://repo-vip.tivo.com:8443/artifactory/libs-release'
+	}
+}
+
+
+ext {
+	LOGBACK_VERSION = '1.2.3'
+	SPRING_VERSION = '5.2.5.RELEASE'
+	TOMCAT_EMBED_VERSION = '9.0.34'
+	JAXB_API_VERSION = '2.3.0'
+	JAXB_ACTIVATION_VERSION = '1.1'
+	JAXB_RUNTIME_VERSION = '2.3.0'
+	KAFKA_STREAMS_VERSION = '3.4.1'
+	SPRING_KAFKA_VERSION = '3.0.7'
+
+
+}
+
+dependencies {
+	compile (group: 'ch.qos.logback', name: 'logback-classic', version: LOGBACK_VERSION)
+	compile (group: 'cn.leancloud', name: 'archaius-core', version: '0.7.8-a')
+	compile(group: 'org.springframework', name: 'spring-core', version: SPRING_VERSION)
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-jdbc', version: '2.2.6.RELEASE'
+	implementation 'org.springframework.retry:spring-retry'
+	implementation 'org.springframework:spring-aspects'
+	compile(group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: TOMCAT_EMBED_VERSION)
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.json:json:20230618'
+	compileOnly 'org.springframework.kafka:spring-kafka'
+	implementation(group: 'org.apache.kafka', name: 'kafka-streams', version: KAFKA_STREAMS_VERSION) {
+		exclude group: 'com.fasterxml.jackson.core'
+	}
+	implementation(group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0')
+	compileOnly(group: 'org.projectlombok', name: 'lombok', version: '1.18.12')
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation(group: 'org.apache.kafka', name: 'kafka-clients', version: KAFKA_STREAMS_VERSION) {
+		exclude group: 'com.fasterxml.jackson.core'
+	}
+	implementation group: 'org.springframework.kafka', name: 'spring-kafka', version: SPRING_KAFKA_VERSION
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.1.3'
+	implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
+}
+
+build.dependsOn jacocoTestReport, cyclonedxBom
+
+
+tivoDocker {
+	ownerEmail = 'inception-scrum@xperi.com'
+	description = 'Sample uniprocess TWS-NG application.'
+}
+
+wrapper {
+	gradleVersion = '5.5.1'
+}

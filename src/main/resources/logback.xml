@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <appender name="plainLogsToFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/TivoData/Log/${CONTAINER_NAME}/${CONTAINER_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>/TivoData/Log/${CONTAINER_NAME}/${CONTAINER_NAME}.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <!-- keep 14 days' worth of history -->
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}Z [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+ 
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}Z [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+ 
+    <logger name="com.tivo.creditapp" level="INFO"/>
+    <logger name="org.springframework" level="WARN"/>
+ 
+    <!-- This prints a blank STATS line at INFO level for every request. Suppress it.-->
+    <logger name="com.tivo.tws.nextgen.init.WebRequestLoggerFilter" level="WARN"/>
+ 
+    <root level="info">
+        <appender-ref ref="plainLogsToFile"/>
+    </root>
+</configuration>

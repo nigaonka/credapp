@@ -1,0 +1,7 @@
+apply plugin: 'tivo-docker'
+
+tivoDocker {
+    imageName = 'creditapp_performance-test'
+    ownerEmail = 'inception-scrum@xperi.com'
+    description = 'Performance test for echo service'
+}

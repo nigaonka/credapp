@@ -1,0 +1,7 @@
+apply plugin: 'tivo-docker'
+
+tivoDocker {
+    imageName = 'creditapp_functional-test'
+    ownerEmail = 'inception-scrum@xperi.com'
+    description = 'Functional test for creditapp service'
+}

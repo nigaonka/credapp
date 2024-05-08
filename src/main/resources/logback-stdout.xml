@@ -1,0 +1,19 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.tivo.creditapp" level="INFO"/>
+    <logger name="org.springframework" level="WARN" />
+
+    <!-- This prints a blank STATS line at INFO level for every request. Suppress it.-->
+    <logger name="com.tivo.tws.nextgen.init.WebRequestLoggerFilter" level="WARN"/>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
