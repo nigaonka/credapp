@@ -5,7 +5,6 @@ import com.ng.credit.creditapp.kafka.producer.KafkaProducerComp;
 import com.ng.credit.creditapp.kafka.producer.KafkaProducerInputBO;
 import com.ng.credit.creditapp.model.BankDetails;
 import com.ng.credit.creditapp.model.Customer;
-import com.ng.credit.creditapp.model.CustomerAccounts;
 import com.ng.credit.creditapp.service.MessagingService;
 import com.ng.credit.creditapp.util.DynConfigCommonUtils;
 import com.ng.credit.creditapp.util.Util;
@@ -70,8 +69,6 @@ public class MessageProducerServiceImpl implements MessagingService {
 
                 String topicName = DynConfigCommonUtils.getAccTopicName();
                 this.producer = applicationContext.getBean("KafkaProducer", KafkaProducer.class);
-                if (object.getClass().equals(AccountTxn.class))
-                    topicName = DynConfigCommonUtils.getTxnTopicName();
                 String jsonString = util.convertToJSon(object);
                 ProducerRecord producerRecord = new ProducerRecord<>(topicName, getMessageKey(object), jsonString.getBytes());
                 log.info("Pushing message to {}:" + DynConfigCommonUtils.getKafkaEndpoint(), topicName);
@@ -93,14 +90,6 @@ public class MessageProducerServiceImpl implements MessagingService {
         } else if (object.getClass().equals(BankDetails.class)) {
             BankDetails bankDetails = (BankDetails) object;
             return "bank_" + bankDetails.getBankId();
-        } else if (object.getClass().equals(AccountTxn.class)) {
-            AccountTxn accountTxn = (AccountTxn) object;
-            return "txn_" + accountTxn.getAccountNumber();
-
-        } else if (object.getClass().equals(CustomerAccounts.class)) {
-            CustomerAccounts customerAccounts = (CustomerAccounts) object;
-            return "acc_" + customerAccounts.getCustomerId();
-
         } else {
             return UUID.randomUUID().toString();
         }

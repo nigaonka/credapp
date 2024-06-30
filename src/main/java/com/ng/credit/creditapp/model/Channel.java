@@ -1,11 +1,10 @@
 package com.ng.credit.creditapp.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "Content")
-public class Content {
+@Table(name = "channel")
+public class Channel {
 
     public int getId() {
         return id;
@@ -15,12 +14,12 @@ public class Content {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 
     public float getPrice() {
@@ -32,19 +31,26 @@ public class Content {
     }
 
 
-   private int id;
-    private String title;
+    public String getChannelId() {
+        return channelId;
+    }
 
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "channel_name")
+    private String channelName;
+
+    @Column(name="price")
     private float price;
 
-    public String getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
-
-    private String contentId;
+    @Column(name = "channel_id")
+    private String channelId;
 
 }

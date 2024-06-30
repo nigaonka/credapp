@@ -13,7 +13,7 @@ public class Customer implements Serializable {
     private int id;
 
 
-    @Column(name = "customerId")
+    @Column(name = "customer_id")
     private String customerId;
 
     @Column(name = "first_name")
@@ -28,17 +28,6 @@ public class Customer implements Serializable {
     private Customer() {
 
     }
-
-    public Customer(int id, String customerId, String firstName, String lastName) {
-
-        this.id = id;
-        this.customerId = customerId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-
-
-    }
-
 
     public int getId() {
         return id;

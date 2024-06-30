@@ -2,13 +2,11 @@ package com.ng.credit.creditapp.service.impl;
 
 
 import com.ng.credit.creditapp.componant.DatabaseConnect;
-import com.ng.credit.creditapp.model.BankDetails;
-import com.ng.credit.creditapp.model.Customer;
-import com.ng.credit.creditapp.model.CustomerAccounts;
-import com.ng.credit.creditapp.repo.AccountTxnRepo;
-import com.ng.credit.creditapp.repo.BankDetailsRepo;
-import com.ng.credit.creditapp.repo.CustomerAccountsRepo;
+import com.ng.credit.creditapp.model.*;
+import com.ng.credit.creditapp.repo.ChannelRepo;
 import com.ng.credit.creditapp.repo.CustomerRepo;
+import com.ng.credit.creditapp.repo.OfferRepo;
+import com.ng.credit.creditapp.repo.PurchaseOfferRepo;
 import com.ng.credit.creditapp.service.MessagingService;
 import com.ng.credit.creditapp.service.CreditService;
 import com.ng.credit.creditapp.util.Validator;
@@ -23,10 +21,13 @@ import java.util.List;
 public class CreditServiceImpl implements CreditService {
 
     private static final Logger log = LoggerFactory.getLogger(CreditServiceImpl.class);
-    BankDetailsRepo bankDetailsRepo;
+
     private CustomerRepo customerRepo;
-    private CustomerAccountsRepo customerAccountsRepo;
-    private AccountTxnRepo accountTxnRepo;
+    private ChannelRepo channelRepo;
+    private OfferRepo offerRepo;
+    private PurchaseOfferRepo purchaseOfferRepo;
+
+
     private MessagingService messagingService;
     private DatabaseConnect databaseConnect;
 
@@ -39,91 +40,85 @@ public class CreditServiceImpl implements CreditService {
         this.customerRepo = customerRepo;
     }
 
-    public void setBankDetailsRepo(BankDetailsRepo bankDetailsRepo) {
-        this.bankDetailsRepo = bankDetailsRepo;
-    }
-
-    public void setCustomerAccountsRepo(CustomerAccountsRepo customerAccountsRepo) {
-        this.customerAccountsRepo = customerAccountsRepo;
-    }
-
-    public void setAccountTxnRepo(AccountTxnRepo accountTxnRepo) {
-        this.accountTxnRepo = accountTxnRepo;
-    }
 
     @Autowired
     public void setMessagingService(MessagingService messagingService) {
         this.messagingService = messagingService;
     }
 
+
+    @Autowired
+    public void setChannelRepo(ChannelRepo channelRepo) {
+        this.channelRepo = channelRepo;
+    }
+
+    @Autowired
+    public void setOfferRepo(OfferRepo offerRepo) {
+        this.offerRepo = offerRepo;
+    }
+
+    @Autowired
+    public void setPurchaseOfferRepo(PurchaseOfferRepo purchaseOfferRepo) {
+        this.purchaseOfferRepo = purchaseOfferRepo;
+    }
+
     @Override
-    public String createBank(BankDetails bankDetails) {
+    public String createOffer(Offer offer) {
 
-        log.info(" Publishing to kaka ");
-        messagingService.publishToKafka(bankDetails.getBankName(), bankDetails);
-        log.info("Creating the connection ");
-        //var dataSource = databaseConnect.getDataSource();
-        return bankDetails.getBankName() + " created successfully";
+        log.info("Persisting offer");
+        offerRepo.save(offer);
+        return "Offer saved successfully: " + offer.getOfferId();
 
+
+    }
+
+    @Override
+    public List<Offer> listOffer() {
+
+        return offerRepo.findAll();
+
+    }
+
+    @Override
+    public String createPO(PurchaseOffer purchaseOffer) {
+        purchaseOfferRepo.save(purchaseOffer);
+        return "Purchase Offer created " + purchaseOffer.getOfferId();
+
+    }
+
+    @Override
+    public List<PurchaseOffer> listPO() {
+
+        return purchaseOfferRepo.findAll();
+    }
+
+    @Override
+    public String createChannel(Channel channel) {
+        channelRepo.save(channel);
+        return "Channel created " + channel.getChannelName();
+    }
+
+    @Override
+    public List<Channel> listChannel() {
+        return channelRepo.findAll();
     }
 
     @Override
     public String createCustomer(Customer customer) {
         Validator validator = new Validator();
-/*
-        if (validator.isCustomerExists(this.getAllCustomers(), customer)) {
-            return "Customer already exists";
-        } else {
-           // customerRepo.save(customer);
-*/
         messagingService.publishToKafka(customer.getFirstName(), customer);
         log.info("Creating the connection ");
 //        var dataSource = databaseConnect.getDataSource();
         customerRepo.save(customer);
         log.info("Database created ");
         return customer.getFirstName() + " created successfully";
-
     }
 
     @Override
-    public String createCustomerAccounts(CustomerAccounts customerAccounts) {
-        return null;
+    public List<Customer> listCustomers() {
+        return customerRepo.findAll();
     }
 
-
-    @Override
-    public List<BankDetails> getAllBanks() {
-        log.info("Returning all banks");
-        return null;
-        //  return bankDetailsRepo.findAll();
-    }
-
-    @Override
-    public List<Customer> getAllCustomers() {
-
-        log.info("Returning all customers");
-        return null;
-        // return customerRepo.findAll();
-    }
-
-    @Override
-    public List<CustomerAccounts> getAllAccounts() {
-        return null;
-    }
-
-    @Override
-    public BankDetails findBank(String bankName) {
-        List<BankDetails> bankList = null;
-        //bankDetailsRepo.findAll();
-        BankDetails bankDetails = null;
-        for (int i = 0; i < bankList.size(); i++) {
-            bankDetails = bankList.get(i);
-            if (bankDetails.getBankName().equalsIgnoreCase(bankName)) {
-                return bankDetails;
-            }
-        }
-        return null;
-    }
 
     @Override
     public Customer findCustomer(String custName) {

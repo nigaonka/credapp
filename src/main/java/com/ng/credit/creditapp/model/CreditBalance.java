@@ -1,6 +1,20 @@
 package com.ng.credit.creditapp.model;
 
-public class AccountBalance {
+import javax.persistence.*;
+
+@Entity
+@Table (name="credit_balance")
+public class CreditBalance {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    int id;
+    @Column(name = "account_id")
+    String accountId;
+    @Column(name = "credit_balance")
+    double creditBalance;
 
     public int getId() {
         return id;
@@ -18,15 +32,13 @@ public class AccountBalance {
         this.accountId = accountId;
     }
 
-    public float getCreditBalance() {
+    public double getCreditBalance() {
         return creditBalance;
     }
 
-    public void setCreditBalance(float creditBalance) {
+    public void setCreditBalance(double creditBalance) {
         this.creditBalance = creditBalance;
     }
 
-    int id;
-    String accountId;
-    float creditBalance;
+
 }
