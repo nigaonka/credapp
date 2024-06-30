@@ -1,5 +1,10 @@
 package com.ng.credit.creditapp.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Content")
 public class Content {
 
     public int getId() {
